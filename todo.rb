@@ -1,6 +1,7 @@
-%w(rubygems sinatra sinatra/sequel haml).each do |f|
-  require f
-end
+require 'rubygems'
+require 'sinatra'
+require 'sinatra/sequel'
+require 'haml'
 
 ## Config
 set :haml, {:format => :html5}
