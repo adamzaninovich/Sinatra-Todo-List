@@ -57,7 +57,7 @@ __END__
       div.clear { clear: both; }
       div.container { width: 580px; background: #FFF; position: relative; margin: 0 auto; padding: 0; }
       div.container img { float: left; }
-      div.footer { color: #797c80; font-size: 12px; border-left: 1px solid #DDD; border-right: 1px solid #DDD; padding-top: 24px; padding-left: 39px; padding-right: 13px; padding-bottom: 1px; text-align: left; }
+      div.footer { color: #797c80; font-size: 12px; border-left: 1px solid #DDD; border-right: 1px solid #DDD; padding-top: 40px; padding-left: 39px; padding-right: 13px; padding-bottom: 1px; text-align: right; margin-top:-20px; background:#fefefe;}
       img.img_bottom { padding: 0; margin: 0; }
       div.title { padding-top: 34px; padding-left: 39px; padding-right: 39px; text-align: left; border-left: 1px solid #DDD; border-right: 1px solid #DDD; }
       div.title h2 { font-size: 30px; color: #262626; font-weight: normal; margin: 0 0 13px 0; padding: 0; letter-spacing: 0; }
@@ -80,10 +80,10 @@ __END__
           %a{:href => "http://heroku.com"} Heroku
       .content
         = yield
+      .footer
         %small
           Created by
           %a{:href => "http://adamzaninovich.com"} Adam Zaninovich
-      .footer &nbsp;
       %img.img_bottom{:src =>"images/bottom.gif", :width => "580", :height => "8"}
       .clear
       
