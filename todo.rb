@@ -1,48 +1,58 @@
-require 'rubygems'
-require 'sinatra'
-require 'sinatra/sequel'
-require 'haml'
+%w(rubygems sinatra sinatra/sequel twitter_oauth haml).each  { |lib| require lib}
 
 ## Config
-set :haml, {:format => :html5}
-set :public, 'images'
+configure do
+  set :sessions, true
+  set :haml, {:format => :html5}
+  set :public, 'content'
+  @@config = YAML.load_file("config.yml") rescue nil || {}
+end
 
 ## Database Migration
-migration "create todos" do |db|
+migration "create todo" do |db|
   db.create_table :todos do
     primary_key :id
     text :desc, :null => false
-    foreign_key :user_id, :users
-  end
-  db.create_table :users do
-    primary_key :id
-    String :user, :unique => true, :null => false
+    # some way to distinguish users
   end
 end
 
 ## Models
-class Todos < Sequel::Model
-  many_to_one :user
+class Todo < Sequel::Model
 end
 
-class Users < Sequel::Model
-  one_to_many :todos
+before do
+  next if request.path_info =~ /ping$/
+  @user = session[:user]
+  @twitter = TwitterOAuth::Client.new(
+    :consumer_key => ENV['CONSUMER_KEY'] || @@config['consumer_key'],
+    :consumer_secret => ENV['CONSUMER_SECRET'] || @@config['consumer_secret'],
+    :token => session[:access_token],
+    :secret => session[:secret_token]
+  )
+  @rate_limit_status = @twitter.rate_limit_status
 end
 
 ## Routes
-get '/:id' do
+
+get '/' do
+  redirect '/todos' if @user
+  haml :home
+end
+
+get '/todos/:id' do
   pass unless params[:id].to_i > 0
-  @todo = Todos[params[:id]]
+  @todo = Todo[params[:id]]
   @todo.delete
   redirect '/'
 end
 
-get '/' do
+get '/todos' do
   @todos = database[:todos]
   haml :list
 end
 
-post '/' do
+post '/todos' do
   database[:todos] << params unless params[:desc]==''
   redirect '/';
 end
@@ -54,6 +64,9 @@ end
 __END__
 
 ## Views
+
+@@ home
+%h3 You are in the home page
 
 @@ layout
 !!! 5
@@ -77,7 +90,7 @@ __END__
       .clear
       
 @@ list
-%form{:action => "/", :method => "POST"}
+%form{:action => "/todos", :method => "POST"}
   .field
     %input{:class => "text", :id => "desc", :name => "desc"}
     %input{:class=> "button", :type =>"submit", :value=> "Add"}
@@ -85,7 +98,7 @@ __END__
   - @todos.each do |todo|
     %li.todo
       = todo[:desc]
-      %a.delete{:href => "/#{todo[:id]}"}
+      %a.delete{:href => "/todos/#{todo[:id]}"}
         .done
           %small &#x2714;
 %script document.getElementById("desc").focus()

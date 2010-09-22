@@ -1,0 +1,2 @@
+I used sinitter as an example.
+you can also do it with a 3rd party openid provider as described here: http://blog.saush.com/2009/04/25/third-party-user-authentication-with-ruby-in-a-just-few-lines-of-code
