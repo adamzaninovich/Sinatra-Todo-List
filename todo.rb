@@ -75,8 +75,66 @@ get '/css/*.*' do
   end
 end
 
+####################### Twitter Auth #######################
+get '/connect' do
+  # store the request tokens and send to Twitter
+  
+  request_token = @client.request_token(
+    :oauth_callback => ENV['CALLBACK_URL'] || @@config['callback_url']
+  )
+  session[:request_token] = request_token.token
+  session[:request_token_secret] = request_token.secret
+  redirect request_token.authorize_url.gsub('authorize', 'authenticate')
+end
+
+get '/auth' do
+  # auth URL is called by twitter after the user has accepted the application
+  # this is configured on the Twitter application settings page
+  
+  # Exchange the request token for an access token. (fixme)
+  begin
+    @access_token = @client.authorize(
+      session[:request_token],
+      session[:request_token_secret],
+      :oauth_verifier => params[:oauth_verifier]
+    )
+  rescue OAuth::Unauthorized
+  end
+  
+  if @client.authorized?
+      # Storing the access tokens so we don't have to go back to Twitter again
+      # in this session.  In a larger app you would probably persist these details somewhere.
+      session[:access_token] = @access_token.token
+      session[:secret_token] = @access_token.secret
+      session[:user] = true
+      redirect '/todos'
+    else
+      redirect '/'
+  end
+end
+
+get '/disconnect' do
+  # logout
+  session[:user] = nil
+  session[:request_token] = nil
+  session[:request_token_secret] = nil
+  session[:access_token] = nil
+  session[:secret_token] = nil
+  redirect '/'
+end
+
+####################### End Twitter Auth #######################
+
+# useful for site monitoring
 get '/ping' do
   "pong"
+end
+
+## Helpers
+helpers do 
+  def partial(name, options={})
+    erb("_#{name.to_s}".to_sym, options.merge(:layout => false))
+  end
 end
 
 __END__
