@@ -77,5 +77,5 @@ __END__
       = todo[:desc]
       %a.delete{:href => "/#{todo[:id]}"}
         .done
-          %small x
+          %small &#x2714;
 %script document.getElementById("desc").focus()
