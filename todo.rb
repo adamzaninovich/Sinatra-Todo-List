@@ -11,12 +11,22 @@ set :public, 'images'
 migration "create todos" do |db|
   db.create_table :todos do
     primary_key :id
-    text :desc
+    text :desc, :null => false
+    foreign_key :user_id, :users
+  end
+  db.create_table :users do
+    primary_key :id
+    String :user, :unique => true, :null => false
   end
 end
 
 ## Models
 class Todos < Sequel::Model
+  many_to_one :user
+end
+
+class Users < Sequel::Model
+  one_to_many :todos
 end
 
 ## Routes
