@@ -70,7 +70,7 @@ __END__
 %form{:action => "/", :method => "POST"}
   .field
     %input{:class => "text", :id => "desc", :name => "desc"}
-    %input{:class=> "button", :type =>"submit"}
+    %input{:class=> "button", :type =>"submit", value=> "Add"}
 %ul#todos
   - @todos.each do |todo|
     %li.todo
