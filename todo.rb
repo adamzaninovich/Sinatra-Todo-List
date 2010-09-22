@@ -75,6 +75,10 @@ get '/css/*.*' do
   end
 end
 
+get '/ping' do
+  "pong"
+end
+
 __END__
 
 ## Views
