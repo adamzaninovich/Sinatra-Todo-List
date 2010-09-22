@@ -57,9 +57,18 @@ post '/todos' do
   redirect '/';
 end
 
-get '/content/*.*' do
+get '/image/*.*' do
   file,ext = params["splat"]
   if ext == 'png'
+    send_file(File.join('content', file + '.' + ext))
+  else
+    halt 404
+  end
+end
+
+get '/css/*.*' do
+  file,ext = params["splat"]
+  if ext == 'css'
     send_file(File.join('content', file + '.' + ext))
   else
     halt 404
@@ -78,7 +87,7 @@ __END__
 %html
   %head
     %title Sinatra Todo Application
-    %link{:rel=>"stylesheet", :type=>"text/css", :href=>"content/main.css"}
+    %link{:rel=>"stylesheet", :type=>"text/css", :href=>"css/main.css"}
   %body
     .container
       .clear
@@ -89,8 +98,9 @@ __END__
           %a{:href => "http://www.sinatrarb.com"} Sinatra
           framework and deployed on&nbsp;
           %a{:href => "http://heroku.com"}> Heroku
-          \. Created by
-          %a{:href => "http://adamzaninovich.com"} Adam Zaninovich
+          \. Created by&nbsp;
+          %a{:href => "http://adamzaninovich.com"}> Adam Zaninovich
+          \.
       = yield          
       .clear
       
