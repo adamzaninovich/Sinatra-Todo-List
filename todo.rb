@@ -21,6 +21,7 @@ end
 class Todo < Sequel::Model
 end
 
+## Set up auth
 before do
   next if request.path_info =~ /ping$/
   @user = session[:user]
@@ -34,7 +35,6 @@ before do
 end
 
 ## Routes
-
 get '/' do
   redirect '/todos' if @user
   haml :home
@@ -57,8 +57,13 @@ post '/todos' do
   redirect '/';
 end
 
-get '/content/:image' do
-  send_file(File.join('content', params[:image]))
+get '/content/*.*' do
+  file,ext = params["splat"]
+  if ext == 'png'
+    send_file(File.join('content', file + '.' + ext))
+  else
+    halt 404
+  end
 end
 
 __END__
