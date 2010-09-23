@@ -1,5 +1,10 @@
 %w(rubygems sinatra sinatra/sequel twitter_oauth haml yaml).each  { |lib| require lib}
 
+#use Rack::MethodOverride
+# allows for delete and put via _method in form like so:
+# <form method="post" action="/destroy_it">
+#  <input type="hidden" name="_method" value="delete" />
+
 ## Config
 configure do
   set :sessions, true
@@ -14,7 +19,6 @@ migration "create todo" do |db|
     primary_key :id
     text :desc, :null => false
     String :user, :null => false
-    # some way to distinguish users
   end
 end
 
@@ -33,10 +37,11 @@ before do
     :secret => session[:secret_token]
   )
   @rate_limit_status = @twitter.rate_limit_status
+  @message = "Hey, check out this web app made by @thezanino! (#{ENV['APP_LINK'] || @@config['app_link']})"
 end
 
 ## Routes
-get '/' do
+get '/' do # home
   redirect '/todos' if @user
   haml :home
 end
@@ -66,18 +71,18 @@ post '/todos' do # create
   redirect '/'
 end
 
-get '/send_tweet' do
-  redirect '/' unless @user
+get '/tweet' do # confirm tweet
+  
   haml :tweet
 end
 
-get '/tweet/:confirm' do
-  if params[:confirm] != yes
+get '/tweet/:confirm' do # send tweet or cancel
+  if params[:confirm] != 'yes'
     session[:flash] = "Tweet canceled"
-    redirect '/todos'
+  else
+    @twitter.update(@message)
+    session[:flash] = "Tweet sent"
   end
-  @twitter.update("Hey, check out this web app made by @thezanino!")
-  session[:flash] = "Tweet sent"
   redirect '/todos'
 end
 
@@ -163,10 +168,14 @@ __END__
 ## Views
 
 @@ tweet
+%h3
+  %em
+    = '"'+@message+'"'
+  = ' - '+session[:username]
 %h3 Are you sure?
-%a{:href="/tweet/yes"}
+%a.confirm{:href=>"/tweet/yes"}><
   yes
-%a{:href="/tweet/no"}
+%a.confirm{:href=>"/tweet/no"}><
   no
 
 @@ home
@@ -192,7 +201,12 @@ __END__
           %a{:href => "http://heroku.com"}> Heroku
           \. Created by&nbsp;
           %a{:href => "http://adamzaninovich.com"}> Adam Zaninovich
+          \. It's open source, and the code is at&nbsp;
+          %a{:href => "http://github.com/adamzaninovich/Sinatra-Todo-List"}> GitHub
           \.
+      - if @flash
+        #flash
+          = @flash
       = yield
       - if @user
         #user_info
@@ -203,12 +217,9 @@ __END__
       .clear
       - if @user
         #tweet
-          %a{:href=>"/tweet/"} Tweet about how awesome this app is
+          %a{:href=>"/tweet"} Tweet about this app
       
 @@ list
-- if @flash
-  #flash
-    = @flash
 %form{:action => "/todos", :method => "POST"}
   .field
     %input{:class => "text", :id => "desc", :name => "desc"}
