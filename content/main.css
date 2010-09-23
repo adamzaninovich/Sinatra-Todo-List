@@ -21,7 +21,7 @@ div.container {
   background: #FFF;
   position: relative;
   margin: 0 auto;
-  padding: 0 0 20px 0;
+  /*padding: 0 0 20px 0;*/
   border: 1px solid #c0daea;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
@@ -91,6 +91,48 @@ a.delete {
   color: #BF2A22;
   font-weight:bold;
 }
+
+#flash {
+  background:#E8FFDB;
+  border: 1px solid #82B977;
+  color:#333;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  
+}
+
+#user_info {
+  position:absolute;top:0;right:0;;
+  -webkit-border-top-right-radius: 10px;
+  -moz-border-radius-topright: 10px;
+  -webkit-border-bottom-left-radius: 10px;
+  -moz-border-radius-bottomleft: 10px;
+  /*float:right;*/
+  width:70px;
+  
+  background:#c0daea;
+  font-size:0.7em;
+  text-align:right;
+  padding:0px 15px;
+  line-height:35px;
+}
+
+  #user_info img.avatar {
+    display:block;
+    position:absolute;
+    left:0;top:0;
+    -webkit-border-bottom-left-radius: 10px;
+    -moz-border-radius-bottomleft: 10px;
+    height:35px;
+  }
+  #user_info a { text-decoration:none; margin-left:10px; }
+  #user_info a.logout   { font-weight:bold; }
+  
+  #tweet {
+    text-align:right;
+    padding: 0 10px 5px 0;
+    font-size:0.5em;
+  }
 
 
 /*  .field input { display: block; }*/

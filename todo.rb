@@ -1,4 +1,4 @@
-%w(rubygems sinatra sinatra/sequel twitter_oauth haml).each  { |lib| require lib}
+%w(rubygems sinatra sinatra/sequel twitter_oauth haml yaml).each  { |lib| require lib}
 
 ## Config
 configure do
@@ -13,6 +13,7 @@ migration "create todo" do |db|
   db.create_table :todos do
     primary_key :id
     text :desc, :null => false
+    String :user, :null => false
     # some way to distinguish users
   end
 end
@@ -40,21 +41,44 @@ get '/' do
   haml :home
 end
 
-get '/todos/:id' do
+get '/todos/:id' do # delete
+  redirect '/' unless @user
   pass unless params[:id].to_i > 0
   @todo = Todo[params[:id]]
   @todo.delete
   redirect '/'
 end
 
-get '/todos' do
-  @todos = database[:todos]
+get '/todos' do # list
+  redirect '/' unless @user
+  if session[:flash]
+    @flash = session[:flash]
+    session[:flash] = nil
+  end
+  @todos = Todo.filter(:user => session[:username])
   haml :list
 end
 
-post '/todos' do
+post '/todos' do # create
+  redirect '/' unless @user
+  params["user"] = session[:username]
   database[:todos] << params unless params[:desc]==''
-  redirect '/';
+  redirect '/'
+end
+
+get '/send_tweet' do
+  redirect '/' unless @user
+  haml :tweet
+end
+
+get '/tweet/:confirm' do
+  if params[:confirm] != yes
+    session[:flash] = "Tweet canceled"
+    redirect '/todos'
+  end
+  @twitter.update("Hey, check out this web app made by @thezanino!")
+  session[:flash] = "Tweet sent"
+  redirect '/todos'
 end
 
 get '/image/*.*' do
@@ -78,8 +102,8 @@ end
 ####################### Twitter Auth #######################
 get '/connect' do
   # store the request tokens and send to Twitter
-  
-  request_token = @client.request_token(
+  puts ENV['CALLBACK_URL'] || @@config['callback_url']
+  request_token = @twitter.request_token(
     :oauth_callback => ENV['CALLBACK_URL'] || @@config['callback_url']
   )
   session[:request_token] = request_token.token
@@ -93,7 +117,7 @@ get '/auth' do
   
   # Exchange the request token for an access token. (fixme)
   begin
-    @access_token = @client.authorize(
+    @access_token = @twitter.authorize(
       session[:request_token],
       session[:request_token_secret],
       :oauth_verifier => params[:oauth_verifier]
@@ -101,12 +125,14 @@ get '/auth' do
   rescue OAuth::Unauthorized
   end
   
-  if @client.authorized?
+  if @twitter.authorized?
       # Storing the access tokens so we don't have to go back to Twitter again
       # in this session.  In a larger app you would probably persist these details somewhere.
       session[:access_token] = @access_token.token
       session[:secret_token] = @access_token.secret
       session[:user] = true
+      session[:username] = @twitter.info["screen_name"]
+      session[:avatar] = @twitter.info["profile_image_url"]
       redirect '/todos'
     else
       redirect '/'
@@ -115,6 +141,8 @@ end
 
 get '/disconnect' do
   # logout
+  session[:username] = nil
+  session[:avatar] = nil
   session[:user] = nil
   session[:request_token] = nil
   session[:request_token_secret] = nil
@@ -130,19 +158,21 @@ get '/ping' do
   "pong"
 end
 
-## Helpers
-helpers do 
-  def partial(name, options={})
-    erb("_#{name.to_s}".to_sym, options.merge(:layout => false))
-  end
-end
-
 __END__
 
 ## Views
 
+@@ tweet
+%h3 Are you sure?
+%a{:href="/tweet/yes"}
+  yes
+%a{:href="/tweet/no"}
+  no
+
 @@ home
-%h3 You are in the home page
+%h3
+  %a{:href=>"/connect"}
+    %img{:src => '/image/sign-in-with-twitter.png', :title=>"sign into this app with twitter"}
 
 @@ layout
 !!! 5
@@ -163,10 +193,22 @@ __END__
           \. Created by&nbsp;
           %a{:href => "http://adamzaninovich.com"}> Adam Zaninovich
           \.
-      = yield          
+      = yield
+      - if @user
+        #user_info
+          %a.username{:href => "http://twitter.com/"+session[:username], :title => "Logged in as @"+session[:username]+". Go to twitter profile."}
+            %img.avatar{:src => session[:avatar]}
+          %a.logout{:href => "/disconnect"}<
+            Logout        
       .clear
+      - if @user
+        #tweet
+          %a{:href=>"/tweet/"} Tweet about how awesome this app is
       
 @@ list
+- if @flash
+  #flash
+    = @flash
 %form{:action => "/todos", :method => "POST"}
   .field
     %input{:class => "text", :id => "desc", :name => "desc"}
