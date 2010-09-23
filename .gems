@@ -1,3 +1,4 @@
 sinatra
 sinatra-sequel
 haml
+twitter_oauth
