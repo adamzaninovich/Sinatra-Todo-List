@@ -1,5 +1,26 @@
 # Sinatra Todo
 This is a todo list app written in [Sinatra][sinatra] with login using [twitter_oauth][twitter_oauth] by [Richard Taylor][moomerman].
+## CSS Help
+By the way, if anyone is a css guru and knows how to get firefox to display this like webkit, please let me know.
+
+Webkit:
+[[http://files.thezanino.com/images/border-radius/webkit.png]]
+
+Firefox:
+[[http://files.thezanino.com/images/border-radius/firefox.png]]
+
+CSS:
+```css
+	#user_info img.avatar {
+	  display: block;
+	  position: absolute; left: 0; top: 0;
+	  -webkit-border-bottom-left-radius: 10px;
+	  -moz-border-radius-bottomleft: 10px;
+	  border-bottom-left-radius: 10px;
+	  height: 35px;
+	}
+```
+
 ## Live Demo
 You can see sinatra-todo running at [todo.thezanino.com][live_demo] or [sinatra-todo.heroku.com][live_demo_heroku].
 ## Local Setup
