@@ -1,7 +1,7 @@
 # Sinatra Todo
 This is a todo list app written in [Sinatra][sinatra] with login using [twitter_oauth][twitter_oauth] by [Richard Taylor][moomerman].
 ## Live Demo
-You can see sinatra-todo running at [sinatra-todo.heroku.com][live_demo].
+You can see sinatra-todo running at [todo.thezanino.com][live_demo] or [sinatra-todo.heroku.com][live_demo_heroku].
 ## Local Setup
 To run the application locally you’ll need to create a [Twitter OAuth Application][twitter_app].
 
@@ -35,5 +35,6 @@ The application should now be running on Heroku.
 [moomerman]: http://github.com/moomerman
 [sinatra]: http://sinatrarb.com
 [twitter_oauth]: http://github.com/moomerman/twitter_oauth
-[live_demo]: http://sinatra-todo.heroku.com
+[live_demo]: http://todo.thezanino.com
+[live_demo_heroku]: http://sinatra-todo.heroku.com
 [twitter_app]: http://twitter.com/oauth_clients/new "Twitter - Register an Application"
