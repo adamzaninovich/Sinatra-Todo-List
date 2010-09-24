@@ -1,25 +1,186 @@
-body{background:#F2F2F2;padding-top:65px;text-align:center;font-family:Helvetica,sans-serif;text-align:center;color:#444;}
-a,a:hover{color:#185787;text-decoration:none;font-weight:bold;}
-p{margin:0;padding:0 0 13px 0;}
-div.clear{clear:both;}
-div.container{width:580px;background:#FFF;position:relative;margin:0 auto;border:1px solid #c0daea;-moz-border-radius:10px;-webkit-border-radius:10px;}
-div.title{padding-top:34px;padding-left:39px;padding-right:39px;text-align:left;}
-div.title h2{font-size:30px;color:#333;font-weight:normal;margin:0 0 13px 0;padding:0;letter-spacing:0;}
-div.title h3{font-size:16px;color:#3e434a;font-weight:normal;margin:0;padding:0 0 6px 0;line-height:25px;}
-ul#todos{padding:0;}
-li.todo{position:relative;top:0;list-style:none;display:block;padding-left:10px;text-align:left;width:220px;height:30px;border:1px solid #c0daea;line-height:30px;margin:0 auto -1px;-moz-border-radius:2px;-webkit-border-radius:2px;}
-li.todo:hover{background:#C6DEED;}
-div.done:hover{background:#BF2A22;color:#DFDFDF;}
-div.done{text-align:center;position:absolute;right:0;top:0;border-left:1px solid #c0daea;background:#DFDFDF;height:30px;margin-bottom:1px;width:30px;}
-a.delete{text-decoration:none;color:#BF2A22;font-weight:bold;}
-#flash{background:#E8FFDB;border:1px solid #82B977;color:#333;-moz-border-radius:2px;-webkit-border-radius:2px;width:220px;margin:10px auto;padding:5px 0;}
-#user_info{position:absolute;top:0;right:0;;-webkit-border-top-right-radius:10px;-moz-border-radius-topright:10px;-webkit-border-bottom-left-radius:10px;-moz-border-radius-bottomleft:10px;width:70px;background:#c0daea;font-size:0.7em;text-align:right;padding:0px 15px;line-height:35px;}
-#user_info img.avatar{display:block;position:absolute;left:0;top:0;-webkit-border-bottom-left-radius:10px;-moz-border-radius-bottomleft:10px;height:35px;}
-#user_info a{text-decoration:none;margin-left:10px;}
-#user_info a.logout{font-weight:bold;}
-#tweet{text-align:right;padding:0 10px 5px 0;font-size:0.5em;}
-#tweet a{text-decoration:none;}
-div.field input.text{font-weight:bold;border:1px solid #338199;border-color:#1d91d7;border-color:#c0daea;padding:7px 3px 7px 7px;font-size:15px;letter-spacing:0.2px;margin:3px 0 0 1px;background:#fff;-moz-border-radius:2px;-webkit-border-radius:2px;}
-div.field input.button,a.confirm{margin:5px 0 0 0;background:#0084d4;border:2px solid #0078C1;font-size:14px;font-weight:bold;padding:4px 15px 4px 15px;-moz-border-radius:3px;-webkit-border-radius:3px;color:#fff;text-decoration:none;}
-div.field input.button:hover,a.confirm:hover{background:#0078C1;color:#DCE4E7;}
-a.confirm{margin:0 10px;text-decoration:none;}
+body {
+  background: #F2F2F2;
+  padding-top: 65px;
+  text-align: center;
+  font-family: Helvetica,sans-serif;
+  text-align: center;
+  color: #444;
+}
+a,a:hover {
+  color: #185787;
+  text-decoration: none;
+  font-weight: bold;
+}
+p {
+  margin: 0;
+  padding: 0 0 13px 0;
+}
+div.clear {
+  clear: both;
+}
+div.container {
+  width: 580px;
+  background: #FFF;
+  position: relative;
+  margin: 0 auto;
+  border: 1px solid #c0daea;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+div.title {
+  padding-top: 34px;
+  padding-left: 39px;
+  padding-right: 39px;
+  text-align: left;
+}
+div.title h2 {
+  font-size: 30px;
+  color: #333;
+  font-weight: normal;
+  margin: 0 0 13px 0;
+  padding: 0;
+  letter-spacing: 0;
+}
+div.title h3 {
+  font-size: 16px;
+  color: #3e434a;
+  font-weight: normal;
+  margin: 0;
+  padding: 0 0 6px 0;
+  line-height: 25px;
+}
+ul#todos {
+  padding: 0;
+}
+li.todo {
+  position: relative;
+  top: 0;
+  list-style: none;
+  display: block;
+  padding-left: 10px;
+  text-align: left;
+  width: 220px;
+  height: 30px;
+  border: 1px solid #c0daea;
+  line-height: 30px;
+  margin: 0 auto -1px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+}
+li.todo:hover {
+  background: #C6DEED;
+}
+div.done:hover {
+  background: #BF2A22;
+  color: #DFDFDF;
+}
+div.done {
+  text-align: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+  border-left: 1px solid #c0daea;
+  background: #DFDFDF;
+  height: 30px;
+  margin-bottom: 1px;
+  width: 30px;
+}
+a.delete {
+  text-decoration: none;
+  color: #BF2A22;
+  font-weight: bold;
+}
+#flash {
+  background: #E8FFDB;
+  border: 1px solid #82B977;
+  color: #333;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  width: 220px;
+  margin: 10px auto;
+  padding: 5px 0;
+}
+#user_info {
+  position: absolute;
+  top: 0;
+  right: 0;;
+  -webkit-border-top-right-radius: 10px;
+  -moz-border-radius-topright: 10px;
+  border-top-right-radius: 10px;
+  -webkit-border-bottom-left-radius: 10px;
+  -moz-border-radius-bottomleft: 10px;
+  border-bottom-left-radius: 10px;
+  width: 70px;
+  background: #c0daea;
+  font-size: 0.7em;
+  text-align: right;
+  padding: 0px 15px;
+  line-height: 35px;
+}
+#user_info img.avatar {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  -webkit-border-bottom-left-radius: 10px;
+  -moz-border-radius-bottomleft: 10px;
+  border-bottom-left-radius: 10px;
+  height: 35px;
+}
+#user_info a {
+  text-decoration: none;
+  margin-left: 10px;
+}
+#user_info a.logout {
+  font-weight: bold;
+}
+#tweet {
+  text-align: right;
+  padding: 0 10px 5px 0;
+  font-size: 0.5em;
+}
+#tweet a {
+  text-decoration: none;
+}
+div.field input.text {
+  font-weight: bold;
+  border: 1px solid #338199;
+  border-color: #1d91d7;
+  border-color: #c0daea;
+  padding: 7px 3px 7px 7px;
+  font-size: 15px;
+  letter-spacing: 0.2px;
+  margin: 3px 0 0 1px;
+  background: #fff;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+}
+div.field input.button,a.confirm {
+  margin: 5px 0 0 0;
+  background: #0084d4;
+  border: 2px solid #0078C1;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 4px 15px 4px 15px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  color: #fff;
+  text-decoration: none;
+}
+div.field input.button:hover,a.confirm:hover {
+  background: #0078C1;
+  color: #DCE4E7;
+}
+a.confirm {
+  margin: 0 10px;
+  text-decoration: none;
+}
+a img {
+  outline: none;
+  border: none;
+}
