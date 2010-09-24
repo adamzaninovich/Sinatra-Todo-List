@@ -3,11 +3,8 @@ This is a todo list app written in [Sinatra][sinatra] with login using [twitter_
 ## CSS Help
 By the way, if anyone is a css guru and knows how to get firefox to display this like webkit, please let me know.
 
-Webkit:
-[[http://files.thezanino.com/images/border-radius/webkit.png]]
-
-Firefox:
-[[http://files.thezanino.com/images/border-radius/firefox.png]]
+Webkit: ![Webkit](http://files.thezanino.com/images/border-radius/webkit.png)
+Firefox: ![Firefox](http://files.thezanino.com/images/border-radius/firefox.png)
 
 CSS:
 
