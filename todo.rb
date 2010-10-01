@@ -86,9 +86,13 @@ get '/tweet/:confirm' do # send tweet or cancel
   redirect '/todos'
 end
 
+get '/favicon.ico' do
+  halt 404 unless send_file(File.join('content','favicon.ico'))
+end
+
 get '/image/*.*' do
-  file,ext = params["splat"]
-  if ext == 'png'
+  file,ext = params['splat']
+  if ext =~ /png|jpg|jpeg|gif/
     send_file(File.join('content', file + '.' + ext))
   else
     halt 404
@@ -96,8 +100,8 @@ get '/image/*.*' do
 end
 
 get '/css/*.*' do
-  file,ext = params["splat"]
-  if ext == 'css'
+  file,ext = params['splat']
+  if ext =~ /css/
     send_file(File.join('content', file + '.' + ext))
   else
     halt 404
@@ -188,6 +192,7 @@ __END__
 %html
   %head
     %title Sinatra Todo Application
+    %link{:rel=>"icon", :href=>"/favicon.ico"}
     %link{:rel=>"stylesheet", :type=>"text/css", :href=>"css/main.css"}
   %body
     .container
