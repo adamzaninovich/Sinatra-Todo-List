@@ -1,4 +1,11 @@
-%w(rubygems sinatra sinatra/sequel twitter_oauth haml yaml).each  { |lib| require lib}
+%w(
+  rubygems
+  sinatra
+  sinatra/sequel
+  twitter_oauth
+  haml
+  yaml
+).each  { |lib| require lib}
 
 #use Rack::MethodOverride
 # allows for delete and put via _method in form like so:
@@ -50,8 +57,12 @@ get '/todos/:id' do # delete
   redirect '/' unless @user
   pass unless params[:id].to_i > 0
   @todo = Todo[params[:id]]
-  @todo.delete
-  redirect '/'
+  if @todo.user === session[:username]
+    @todo.delete
+  else
+    session[:flash] = "You can't delete an item that isn't your own!"
+  end
+  redirect '/todos'  
 end
 
 get '/todos' do # list
@@ -68,7 +79,7 @@ post '/todos' do # create
   redirect '/' unless @user
   params["user"] = session[:username]
   database[:todos] << params unless params[:desc]==''
-  redirect '/'
+  redirect '/todos'
 end
 
 get '/tweet' do # confirm tweet
