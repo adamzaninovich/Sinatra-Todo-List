@@ -11,6 +11,7 @@ use Rack::MethodOverride
 # allows for delete and put via _method in form like so:
 # <form method="post" action="/destroy_it">
 #  <input type="hidden" name="_method" value="delete" />
+# ...
 
 ## Config
 configure do
