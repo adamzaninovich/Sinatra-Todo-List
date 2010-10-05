@@ -7,7 +7,7 @@
   yaml
 ).each  { |lib| require lib}
 
-#use Rack::MethodOverride
+use Rack::MethodOverride
 # allows for delete and put via _method in form like so:
 # <form method="post" action="/destroy_it">
 #  <input type="hidden" name="_method" value="delete" />
@@ -57,12 +57,16 @@ get '/todos/:id' do # delete
   redirect '/' unless @user
   pass unless params[:id].to_i > 0
   @todo = Todo[params[:id]]
+  if @todo.nil?
+    session[:flash] = "That item was already deleted!"
+    redirect '/todos'
+  end
   if @todo.user === session[:username]
     @todo.delete
   else
     session[:flash] = "You can't delete an item that isn't your own!"
   end
-  redirect '/todos'  
+  redirect '/todos'
 end
 
 get '/todos' do # list
@@ -79,11 +83,26 @@ post '/todos' do # create
   redirect '/' unless @user
   params["user"] = session[:username]
   database[:todos] << params unless params[:desc]==''
-  redirect '/todos'
+  @todos = Todo.filter(:user => session[:username])
+  haml :list
+end
+
+get '/manage' do # list all
+  halt 404 unless session[:username] === 'thezanino'
+  @todos = Todo.all
+  haml :manage
+end
+
+delete '/manage' do # delete
+  halt 404 unless session[:username] === 'thezanino'
+  pass unless params[:id].to_i > 0
+  @todo = Todo[params[:id]]
+  @todo.delete
+  @todos = Todo.all
+  haml :manage
 end
 
 get '/tweet' do # confirm tweet
-  
   haml :tweet
 end
 
@@ -248,3 +267,24 @@ __END__
         .done
           %small &#x2714;
 %script document.getElementById("desc").focus()
+
+@@ manage
+%table#list
+  %tr.header
+    %th id
+    %th todo
+    %th user
+    %th actions
+  - @todos.each do |todo|
+    %tr.todo
+      %td
+        = todo[:id]
+      %td
+        = todo[:desc]
+      %td
+        = todo[:user]
+      %td.delete
+        %form{:action => "/manage", :method => "post"}
+          %input{:type => "hidden", :name => "_method", :value => "delete"}
+          %input{:type => "hidden", :name => "id", :value => todo[:id]}
+          %input{:type => "submit", :class => "delete_button", :value => "delete"}
