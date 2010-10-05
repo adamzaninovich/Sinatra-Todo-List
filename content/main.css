@@ -24,8 +24,18 @@ div.field input.button,a.confirm{margin:5px 0 0 0;background:#0084d4;border:2px 
 div.field input.button:hover,a.confirm:hover{background:#0078C1;color:#DCE4E7;}
 a.confirm{margin:0 10px;text-decoration:none;}
 a img{outline:none;border:none;}
-table#list{background:#c0daea;width:420px;margin:0 auto;}
-table#list tr.todo{text-align:center;width:220px;height:30px;line-height:30px;margin:0 auto -1px;}
-table#list td{background:#fff;}
-table#list td.delete input.delete_button {cursor:pointer;background:none;border:0;color:#ff0000}
-table#list td.delete input.delete_button:hover {color:#000;}
+table#list{background:#c0daea;width:420px;margin:10px auto 20px;}
+table#list tr.todo{text-align:left;width:220px;height:30px;line-height:30px;margin:0 auto -1px;}
+table#list td{background:#fff;padding-left:5px;}
+table#list td.delete input.delete_button {
+  color:#f00;
+  padding:0px;
+  background:none;
+  border:none;
+  display:block;
+  text-decoration:underline;
+  cursor:pointer;
+}
+table#list td.delete input.delete_button:hover {
+  color: #000;
+}

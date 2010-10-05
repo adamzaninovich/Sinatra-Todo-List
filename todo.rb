@@ -289,3 +289,4 @@ __END__
           %input{:type => "hidden", :name => "_method", :value => "delete"}
           %input{:type => "hidden", :name => "id", :value => todo[:id]}
           %input{:type => "submit", :class => "delete_button", :value => "delete"}
+%a{:href => '/todos'} Back to list
